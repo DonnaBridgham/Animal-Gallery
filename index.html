@@ -1,0 +1,131 @@
+<!-- This is a first example of using a template --> 
+2 
+ 
+3 <head> 
+4 
+ 
+5 <!-- include our css files --> 
+6 
+ 
+7 
+ 
+8 <link href="css/bootstrap.css" rel="stylesheet"> 
+9 <link href="css/gallery.css" rel="stylesheet"> 
+10 
+ 
+11 </head> 
+12 
+ 
+13 <body> 
+14 
+ 
+15 	<div id="container"> 
+16 		<div class="row"> 
+17 			<div class="col-md-2 col-sm-12"> 
+18 				<nav class="navbar navbar-default"> 
+19 					<div class="container-fluid"> 
+20 						<div class="navbar-header"> 
+21 							<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#pills" aria-expanded="false"> 
+22 								<span class="sr-only">Toggle navigation</span> 
+23 								Albums 
+24 							</button> 
+25 						</div> 
+26 						<div class="collapse navbar-collapse" id="pills"> 
+27 							<div id="content_left"> 
+28 							<!-- animal list is rendered here --> 
+29 							</div> 
+30 						</div> 
+31 					</div> 
+32 				</nav> 
+33 			</div> 
+34 			<div class="col-md-10 col-sm-12"> 
+35 				<div id="content_right"> 
+36 					<!-- animal detail is rendered here --> 
+37 				</div> 
+38 			</div> 
+39 		</div> 
+40 	</div> 
+41 
+ 
+42 	<!--Include JS libraries--> 
+43 
+ 
+44 	<script src="js/jquery-2.1.4.min.js"></script> 
+45 	<script src="js/handlebars-v3.0.3.js"></script> 
+46 	<script src="js/bootstrap.min.js"></script> 
+47 	<script src="AnimalsData.js"></script> 
+48 
+ 
+49 	<!-- this is our template put your code in here...--> 
+50 	<script id="category-template" type="text/x-handlebars-template"> 
+51 		<ul class="nav nav-pills nav-stacked nav-pills-stacked-example head-menu"> 
+52 			<input type="hidden" id="selected_menu_item" value="$selectedMenuId;"> 
+53 		{{#each animals}} 
+54 		<!-- note that we set the class to js-animal name. This lets us assign a click event to this li --> 
+55 			<li><a href="#" class="js-animal-name" data-id="{{name}}">{{name}}</a></li> 
+56 		{{/each}} 
+57 		</ul> 
+58 	</script> 
+59 
+ 
+60 	<script id="animal-detail-template" type="text/x-handlebars-template"> 
+61 		<h2>{{name}}</h2> 
+62 		<img class="images" src="{{image1}}"> 
+63 		<img class="images" src="{{image2}}"> 
+64 	</script> 
+65 
+ 
+66   <!-- javascript code to fill the template --> 
+67   <script type="text/javascript"> 
+68  
+69 	// grab our template code from the DOM 
+70 	var source   = $("#category-template").html(); 
+71  
+72 	// compile the template so we can use it 
+73 	var template = Handlebars.compile(source); 
+74  
+75 	// generate HTML from the data 
+76 	var html    = template(animals_data); 
+77  
+78 	// add the HTML to the content div 
+79 	$('#content_left').html(html); 
+80  
+81 	// this event listener is triggered when the user clicks on an animal name 
+82 	$('.js-animal-name').on('click', function(e){ 
+83 		var animal_name = $(e.target).data('id');// pull the data-id attribute, which contains the name 
+84 		console.log('rendering detail page for '+animal_name); 
+85 		for (var i=0;i<animals_data.animals.length;i++){// look for the animal in the array of animals 
+86 			var an_animal = animals_data.animals[i]; 
+87 			if (an_animal.name == animal_name){// found it! 
+88 				break; 
+89 			} 
+90 		} 
+91 	// HERE IS WHERE YOU COME IN... 
+92 		// fill in the following gaps: 
+93 		// 1) 
+94 		// load the html content of the animal-detail-template into a variable called sourcs 
+95  
+96 		var source  = $("#animal-detail-template").html(); 
+97  
+98 		// 2) 
+99 		// compile the contents of that variable using Handlebars and store it into 
+100  
+101 		var template = Handlebars.compile(source); 
+102  
+103 		// 3) 
+104 		// call the template function, passing it the 'an_animal' variable to render the animal data with 
+105 		// the template and store the results in a variable. 
+106  
+107 		var html = template(an_animal); 
+108  
+109 		// 4) 
+110 		// finally, replace the contents of the div with id #content_right 
+111 		// with the results of your template render 
+112  
+113 		$('#content_right').html(html); 
+114  
+115 	}); 
+116   </script> 
+117 
+ 
+118 </body> 
